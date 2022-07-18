@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+    <meta charset="UTF-8">
+    <title>{{ site.title }}</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <link rel="icon" type="image/x-icon" href="/assets/static/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#e77500">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+
+    <!-- MathJax -->
+    <script
+      type="text/javascript"
+      async
+      src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"
+    >
+    </script>
+
+    <!-- Twitter cards -->
+    <meta name="twitter:site"    content="@{{ site.twitter.username }}">
+    <meta name="twitter:title"   content="{{ site.title }}">
+    <meta name="twitter:card"    content="summary">
+    <meta name="twitter:image"   content="{{ site.title_image }}">
+    <meta name="twitter:description" content="{{ site.description }}">
+  </head>
+  <body>
+    <header class="page-header" role="banner">
+      <h1 class="project-name">{{ site.title }}</h1>
+      {% if site.description %}
+      <h2 class="project-tagline">{{ site.description }}</h2>
+      {% endif %}
+      {% for author in site.authors %}
+      <a class="project-link" href={{ author.link }}>{{ author.name }}</a>
+      {% if forloop.last == false %}
+      &emsp;
+      {% endif %}
+      {% endfor %}
+      <div style="margin-top: 1rem">
+        <a class="project-link" href="https://princeton-nlp.github.io/">Princeton University</a>
+      </div>
+      {% if site.env_repo %}
+      <a href="{{ site.env_repo }}" class="btn">Env. Repo</a>
+      {% endif %}
+      {% if site.mdl_repo %}
+      <a href="{{ site.mdl_repo }}" class="btn">Models Repo</a>
+      {% endif %}
+      {% if site.paper %}
+      <a href="{{ site.paper }}" class="btn">Paper</a>
+      {% endif %}
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      {{ content }}
+
+      <h2 id="authors">Authors</h2>
+      <div class="container">
+      {% for author in site.authors %}
+        <figure>
+          {% if forloop.first == true %}
+          <a href={{ author.link }}><img src={{ author.pic }} height="110" alt={{ author.name }} class="profphoto" id="firstprofphoto"></a>
+          {% else %}
+          <a href={{ author.link }}><img src={{ author.pic }} height="110" alt={{ author.name }} class="profphoto"></a>
+          {% endif %}
+          <figcaption><a href={{ author.link }}>{{ author.name }}</a></figcaption>
+        </figure>
+      {% endfor %}
+      </div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/webshop-pnlp/webshop-pnlp.github.io">WebShop</a>
+          is maintained by <a href="https://github.com/princeton-nlp">princeton-nlp</a>.
+        </span>
+      </footer>
+    </main>
+  </body>
+</html>

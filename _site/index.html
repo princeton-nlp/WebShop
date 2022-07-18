@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <title>WebShop</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <link rel="icon" type="image/x-icon" href="/assets/static/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#e77500">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+
+    <!-- MathJax -->
+    <script
+      type="text/javascript"
+      async
+      src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"
+    >
+    </script>
+
+    <!-- Twitter cards -->
+    <meta name="twitter:site"    content="@princeton_nlp">
+    <meta name="twitter:title"   content="WebShop">
+    <meta name="twitter:card"    content="summary">
+    <meta name="twitter:image"   content="">
+    <meta name="twitter:description" content="Towards Scalable Real-World Web Interaction with Grounded Language Agents">
+  </head>
+  <body>
+    <header class="page-header" role="banner">
+      <h1 class="project-name">WebShop</h1>
+      
+      <h2 class="project-tagline">Towards Scalable Real-World Web Interaction with Grounded Language Agents</h2>
+      
+      
+      <a class="project-link" href=https://ysymyth.github.io/>Shunyu Yao</a>
+      
+      &emsp;
+      
+      
+      <a class="project-link" href=https://howard50b.github.io/>Howard Chen</a>
+      
+      &emsp;
+      
+      
+      <a class="project-link" href=https://john-b-yang.github.io/>John Yang</a>
+      
+      &emsp;
+      
+      
+      <a class="project-link" href=https://www.cs.princeton.edu/~karthikn/>Karthik Narasimhan</a>
+      
+      
+      <div style="margin-top: 1rem">
+        <a class="project-link" href="https://princeton-nlp.github.io/">Princeton University</a>
+      </div>
+      
+      <a href="https://github.com/princeton-nlp/WebShop" class="btn">Env. Repo</a>
+      
+      
+      
+      <a href="https://arxiv.org/abs/2207.01206" class="btn">Paper</a>
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <p><img src="/assets/static/recording.gif" /></p>
+
+<h2 id="abstract">Abstract</h2>
+<p>Existing benchmarks for grounding language in interactive environments either lack real-world linguistic elements, or prove difficult to scale up due to substantial human involvement in the collection of data or feedback signals. To bridge this gap, we develop WebShop – a simulated e-commerce website environment with 1.18 million real-world products and 12,087 crowd-sourced text instructions. Given a text instruction specifying a product requirement, an agent needs to navigate multiple types of webpages and issue diverse actions to find, customize, and purchase an item. WebShop provides several challenges for language grounding including understanding compositional instructions, query (re-)formulation, comprehending and acting on noisy text in webpages, and performing strategic exploration. We collect over 1,600 human demonstrations for the task, and train and evaluate a diverse range of agents using reinforcement learning, imitation learning, and pre-trained image and language models. Our best model achieves a task success rate of 29%, which outperforms rule-based heuristics (9.6%) but is far lower than human expert performance (59%). We also analyze agent and human trajectories and ablate various model components to provide insights for developing future agents with stronger language understanding and decision making abilities. Finally, we show that agents trained on WebShop exhibit non-trivial <em>sim-to-real</em> transfer when evaluated on <a href="https://www.amazon.com/">amazon.com</a>, indicating the potential value of WebShop in developing practical web-based agents that can operate in the wild.</p>
+
+<h2 id="webshop-environment">WebShop Environment</h2>
+<div style="text-align:center;">
+    <img src="/assets/static/webshop-diagram.png" width="90%" />
+</div>
+
+<p>The diagram’s components are as follows:</p>
+<ul>
+  <li>A: An example task trajectory in HTML mode, where a user can
+    <ul>
+      <li>(1) search a query in a search page</li>
+      <li>(2) click a product item in a results page</li>
+      <li>(3) choose a color option in a item page</li>
+      <li>(4) check item-detail pages and go back to the item page</li>
+      <li>(5) finally buy the product to end the episode and recieve and reward.</li>
+    </ul>
+  </li>
+  <li>B: The results page in simple mode for agent training and evaluation. The <span style="color:blue">blue</span> text indicates clickable actions and <strong>bold</strong> text indicates the action selected by the agent.</li>
+  <li>C: The product notation (described in section 3 of the paper) corresponding to the product in A. The attributes \(Y_{att}\) are hidden from the task performer.</li>
+</ul>
+
+<h2 id="demo">Demo</h2>
+<h3 id="interactive-web-app">Interactive Web App</h3>
+<iframe src="https://hf.space/gradioiframe/webshop/amazon_shop/+" width="100%" height="900"></iframe>
+
+<h3 id="trajectories">Trajectories</h3>
+<p>The below slides show the step-by-step actions of trajectories generated from different agents and entities performing the task of searching for a product based on a goal instruction.</p>
+
+<p><strong>Goal Instruction</strong>: I’m looking for a quick-release replacement fitness strap band; it should match my chic teal fitbit, and price lower than 40.00 dollars</p>
+
+<p>These first four slideshows showcase trajectories by an MTurk worker, Rule Based Heuristic Imitation Learning Agent, and Imitation Learning + Reinforcement Learning Agent searching for a product on WebShop given the same goal instruction.</p>
+<div style="text-align:center;">
+    <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vRv8w_xsn8Y2dIH9bteRaR74gGv0TDdCYBa460JNefCa5pmbrwxc5FFUCzk2dx-ElVsy99dMcyme2Vh/embed?start=false&amp;loop=false&amp;delayms=10000" frameborder="0" width="49%" height="300" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+    <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQa-LV0_ElycuIjva2TLwj3LKdZfhbEgGX0rzZbt1a6Jjkl9t-pcakCJMGRiJV_wnUrfptvCN_x_cm0/embed?start=false&amp;loop=false&amp;delayms=10000" frameborder="0" width="49%" height="300" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+</div>
+<div style="text-align:center;">
+    <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vR2xraC_z1pX4J7Ajb00MmqFBj5HwXu88sLz7a8bp6rNTydoWJEWc1qUsfFLLgtUa1boM0Y3c8OhSN2/embed?start=false&amp;loop=false&amp;delayms=10000" frameborder="0" width="49%" height="300" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+    <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTZ8tS8jgniUgVw2MGLxmih5fj-8GQdxKNOM3gYpPlLY91Tj6bSM39qpqfdoqQI00I8QhyAae_7P1eM/embed?start=false&amp;loop=false&amp;delayms=10000" frameborder="0" width="49%" height="300" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+</div>
+
+<p><em>Sim-to-real Transfer</em>: This last slideshow shows a trajectory generated by an Imitation Learning agent searching on the www.amazon.com website, achieved via sim-to-real transfer logic.</p>
+<div style="text-align:center;">
+    <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vRmGmWmt5PInGy4qSG7JZg9LcDAHULrH8sGY2QIXyD55KsikNxMZ5nhlPHYrB_nOa8g8DtIIqJolfjD/embed?start=false&amp;loop=false&amp;delayms=10000" frameborder="0" width="49%" height="300" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+</div>
+
+<h2 id="citation">Citation</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@inproceedings{yao2022webshop,
+  bibtex_show = {true},
+  title = {WebShop: Towards Scalable Real-World Web Interaction with Grounded Language Agents},
+  author = {Yao, Shunyu and Chen, Howard and Yang, John and Narasimhan, Karthik},
+  booktitle = {ArXiv},
+  year = {preprint},
+  html = {https://arxiv.org/abs/2207.01206},
+  tag = {NLP}
+}
+</code></pre></div></div>
+
+
+      <h2 id="authors">Authors</h2>
+      <div class="container">
+      
+        <figure>
+          
+          <a href=https://ysymyth.github.io/><img src=https://ysymyth.github.io/images/self.jpeg height="110" alt=Shunyu Yao class="profphoto" id="firstprofphoto"></a>
+          
+          <figcaption><a href=https://ysymyth.github.io/>Shunyu Yao</a></figcaption>
+        </figure>
+      
+        <figure>
+          
+          <a href=https://howard50b.github.io/><img src=https://media-exp2.licdn.com/dms/image/C4E03AQFJvzNyu9Y0ZA/profile-displayphoto-shrink_200_200/0/1516499453606?e=1661385600&v=beta&t=ttflKId8nMSQjLUDC28zuAtMoDoXW77MxAfRptuWagI height="110" alt=Howard Chen class="profphoto"></a>
+          
+          <figcaption><a href=https://howard50b.github.io/>Howard Chen</a></figcaption>
+        </figure>
+      
+        <figure>
+          
+          <a href=https://john-b-yang.github.io/><img src=https://drive.google.com/uc?export=view&id=1ocEEB27CCtYQu0kLDFGZqwW7Lh4eswwQ height="110" alt=John Yang class="profphoto"></a>
+          
+          <figcaption><a href=https://john-b-yang.github.io/>John Yang</a></figcaption>
+        </figure>
+      
+        <figure>
+          
+          <a href=https://www.cs.princeton.edu/~karthikn/><img src=https://princeton-nlp.github.io/assets/images/people/karthik-photo.jpg height="110" alt=Karthik Narasimhan class="profphoto"></a>
+          
+          <figcaption><a href=https://www.cs.princeton.edu/~karthikn/>Karthik Narasimhan</a></figcaption>
+        </figure>
+      
+      </div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/webshop-pnlp/webshop-pnlp.github.io">WebShop</a>
+          is maintained by <a href="https://github.com/princeton-nlp">princeton-nlp</a>.
+        </span>
+      </footer>
+    </main>
+  </body>
+</html>
