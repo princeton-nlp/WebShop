@@ -8,17 +8,13 @@ from collections import defaultdict
 from ast import literal_eval
 from decimal import Decimal
 
-import cleantext
 from tqdm import tqdm
-from rank_bm25 import BM25Okapi
 from flask import render_template_string
 from rich import print
 from pyserini.search.lucene import LuceneSearcher
 
 from web_agent_site.utils import (
     BASE_DIR,
-    DEFAULT_FILE_PATH,
-    DEFAULT_REVIEW_PATH,
     DEFAULT_ATTR_PATH,
     HUMAN_ATTR_PATH
 )
@@ -323,21 +319,11 @@ def load_products(filepath, num_products=None, human_goals=True):
         products[i]['option_to_image'] = option_to_image
 
         # without color, size, price, availability
-        # if asin in attributes and 'attributes' in attributes[asin]:
-        #     products[i]['Attributes'] = attributes[asin]['attributes']
-        # else:
-        #     products[i]['Attributes'] = ['DUMMY_ATTR']
-        # products[i]['instruction_text'] = \
-        #     attributes[asin].get('instruction', None)
-        # products[i]['instruction_attributes'] = \
-        #     attributes[asin].get('instruction_attributes', None)
-
-        # without color, size, price, availability
         if asin in attributes and 'attributes' in attributes[asin]:
             products[i]['Attributes'] = attributes[asin]['attributes']
         else:
             products[i]['Attributes'] = ['DUMMY_ATTR']
-            
+
         if human_goals:
             if asin in human_attributes:
                 products[i]['instructions'] = human_attributes[asin]

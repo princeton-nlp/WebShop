@@ -28,6 +28,14 @@ pip install -r requirements.txt;
 conda install -c pytorch faiss-cpu;
 conda install -c conda-forge openjdk=11;
 
+# Build search engine index
+cd search_engine
+mkdir -p resources resources_100 resources_1k resources_100k
+python convert_product_file_format.py # convert items.json => required doc format
+mkdir -p indexes
+./run_indexing.sh
+cd ..
+
 # Download dataset into `data` folder via `gdown` command
 mkdir -p data;
 cd data;
@@ -46,14 +54,6 @@ cd ..
 
 # Download spaCy large NLP model
 python -m spacy download en_core_web_lg
-
-# Build search engine index
-cd search_engine
-mkdir -p resources resources_100 resources_1k resources_100k
-python convert_product_file_format.py # convert items.json => required doc format
-mkdir -p indexes
-./run_indexing.sh
-cd ..
 
 # Create logging folder + samples of log data
 get_human_trajs () {
