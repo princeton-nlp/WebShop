@@ -66,7 +66,7 @@ The `-d` flag argument allows you to specify whether you would like to pull the 
 
 ## 🛠️ Usage
 The WebShop environment can be rendered in two modes - `html` and `simple` - each of which offer a different observation space. The `simple` mode strips away the extraneous meta-data that the `html` mode includes to make model training and evaluation easier.
-### Webpage (`html` mode)
+### Webpage Environment (`html` mode)
 Launch the `WebShop` webpage:
 ```sh
 > ./run_dev.sh
@@ -79,7 +79,7 @@ The current WebShop build comes with two flags:
 * `--log`: Include this flag to create a trajectory `.jsonl` log file of actions on WebShop
 * `--attrs`: Include this flag to display an `Attributes` tab on the `item_page` of WebShop
 
-### Text (`simple` mode)
+### Text Environment (`simple` mode)
 The `simple` mode of the WebShop environment is packaged and readily available as an OpenAI environment. The OpenAI gym definitions of the text environment can be found in the `web_agent_site/envs` folder.
 
 To start using the gym and building agents that interact with the WebShop environment, include the following statements in your Python file:
@@ -91,7 +91,7 @@ env = gym.make('WebAgentTextEnv-v0', observation_mode='text', num_products=...)
 ```
 Now, you can write your own agent that interacts with the environment via the standard OpenAI gym [interface](https://www.gymlibrary.ml/content/api/).
 
-Examples of a `RandomPolicy` agent interacting with the WebShop environment in both `html` and `simple` mode can be found in the `modeling` folder. To run these examples locally, run the `run_web_agent_text_env.sh` or `run_web_agent_site_env.sh` script:
+Examples of a `RandomPolicy` agent interacting with the WebShop environment in both `html` and `simple` mode can be found in the `run_envs` folder. To run these examples locally, run the `run_web_agent_text_env.sh` or `run_web_agent_site_env.sh` script:
 ```sh
 > ./run_web_agent_text_env.sh
 Products loaded.
@@ -105,6 +105,9 @@ Taking action "search[shoes]" -> Reward = 0.0
 ...
 ```
 In order to run the `run_web_agent_site_env.sh` script, you must download a version of [ChromeDriver](https://chromedriver.chromium.org/downloads) compatible with your Chrome browser version. Once you have downloaded and unzipped the executable, rename it `chromedriver` and place it in the `webshop/envs` folder.
+
+### Baseline Models
+To run baseline models (rule, IL, RL, IL+RL) from the paper, please refer to the `README.md` in the [baseline_models](https://github.com/princeton-nlp/webshop/tree/master/baseline_models) folder.
 
 ### Sim-to-real Transfer
 To read more about how the sim-to-real transfer of agents trained on WebShop to other environments works, please refer to the `README.md` in the [transfer](https://github.com/princeton-nlp/webshop/tree/master/transfer) folder.

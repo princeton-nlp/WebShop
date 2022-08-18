@@ -1,2 +1,2 @@
 #!/bin/bash
-python -m modeling.run_web_agent_text_env
+python -m run_envs.run_web_agent_text_env
