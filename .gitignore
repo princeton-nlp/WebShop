@@ -6,6 +6,7 @@
 .idea/
 .pytest_cache/
 .vscode/
+*.jekyll-cache/
 
 __pycache__/
 data/
