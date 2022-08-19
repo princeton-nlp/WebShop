@@ -16,6 +16,7 @@ from pyserini.search.lucene import LuceneSearcher
 from web_agent_site.utils import (
     BASE_DIR,
     DEFAULT_ATTR_PATH,
+    DEFAULT_REVIEW_PATH,
     HUMAN_ATTR_PATH
 )
 
@@ -36,6 +37,7 @@ ACTION_TO_TEMPLATE = {
     'Reviews': 'review_page.html',
     'Attributes': 'attributes_page.html',
 }
+
 
 def map_action_to_html(action, **kwargs):
     action_name, action_arg = parse_action(action)
@@ -141,13 +143,7 @@ def convert_web_app_string_to_var(name, string):
     return var
 
 
-def get_top_n_product_from_keywords(
-        keywords,
-        search_engine,
-        all_products,
-        product_item_dict,
-        attribute_to_asins=None,
-    ):
+def get_top_n_product_from_keywords(keywords, search_engine, all_products, product_item_dict, attribute_to_asins=None):
     if keywords[0] == '<r>':
         top_n_products = random.sample(all_products, k=SEARCH_RETURN_N)
     elif keywords[0] == '<a>':
@@ -230,13 +226,13 @@ def load_products(filepath, num_products=None, human_goals=True):
     print('Products loaded.')
     products = clean_product_keys(products)
     
-    # with open(DEFAULT_REVIEW_PATH) as f:
-    #     reviews = json.load(f)
     all_reviews = dict()
     all_ratings = dict()
-    # for r in reviews:
-    #     all_reviews[r['asin']] = r['reviews']
-    #     all_ratings[r['asin']] = r['average_rating']
+    with open(DEFAULT_REVIEW_PATH) as f:
+        reviews = json.load(f)
+        for r in reviews:
+            all_reviews[r['asin']] = r['reviews']
+            all_ratings[r['asin']] = r['average_rating']
 
     if human_goals:
         with open(HUMAN_ATTR_PATH) as f:
