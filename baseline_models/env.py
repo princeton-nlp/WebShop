@@ -4,10 +4,10 @@ import random
 from os.path import join, dirname, abspath
 from collections import defaultdict
 
-# do this if e.g. running in different folders
-# MODEL_PATH = dirname(abspath(__file__))
-# SITE_PATH = join(MODEL_PATH, '../web-agent-site')
-# sys.path.insert(0, SITE_PATH)
+# connect to WebShop env
+MODEL_PATH = dirname(abspath(__file__))
+SITE_PATH = join(MODEL_PATH, '../')
+sys.path.insert(0, SITE_PATH)
 
 from web_agent_site.envs import WebAgentTextEnv
 from web_agent_site.utils import *
