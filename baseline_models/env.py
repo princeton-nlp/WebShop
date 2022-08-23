@@ -4,6 +4,7 @@ import random
 from os.path import join, dirname, abspath
 from collections import defaultdict
 
+# connect to WebShop env
 MODEL_PATH = dirname(abspath(__file__))
 SITE_PATH = join(MODEL_PATH, '../')
 sys.path.insert(0, SITE_PATH)
