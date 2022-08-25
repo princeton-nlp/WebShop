@@ -210,31 +210,32 @@ def get_option_reward(purchased_product, goal_options, purchased_options):
     goal_options = [normalize_color(o) for o in goal_options]
 
     num_option_matches = 0
+    found_goals = set()
     for p_option_k, p_option_v in purchased_options.items():
-        matched = False
-
         # Perform matching of each purchased option against each goal option
         if p_option_k.lower() in EXACT_MATCH_OPTS:
             # Exact Matching
             if p_option_v in goal_options:
                 num_option_matches += 1
-                matched = True
+                found_goals.add(p_option_v)
         else:
             # Fuzzy Matching
             for g_option in goal_options:
                 score = fuzz.token_set_ratio(g_option, p_option_v)
                 if score > 85:
                     num_option_matches += 1
-                    matched = True
+                    found_goals.add(g_option)
                     break
-        
-        # Look for option in other components
-        if (not matched and (
-            p_option_v in purchased_product['Title'].lower() or
-            p_option_v in ' '.join(purchased_product['BulletPoints']).lower() or
-            p_option_v in purchased_product['Description'].lower()
-        )):
-            num_option_matches += 1
+
+    # Look for exact match of option in title, features, or description
+    if len(found_goals) < len(goal_options):
+        for g_option in goal_options:
+            if (g_option not in found_goals and (
+                g_option in purchased_product['Title'].lower() or
+                g_option in ' '.join(purchased_product['BulletPoints']).lower() or
+                g_option in purchased_product['Description'].lower()
+            )):
+                num_option_matches += 1
 
     # Calculate option reward as fraction of goal options hit
     r_option = num_option_matches / len(goal_options) if len(goal_options) > 0 else None

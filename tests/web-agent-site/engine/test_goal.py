@@ -29,15 +29,19 @@ def test_get_type_reward():
     purchased['product_category'] = "b › c › a"
     result = get_type_reward(purchased, goal)
     assert result['category_match'] == True
+
     purchased['product_category'] = "d › e › f"
     result = get_type_reward(purchased, goal)
     assert result['category_match'] == False
+
     purchased['product_category'] = "a › d › b"
     result = get_type_reward(purchased, goal)
     assert result['category_match'] == True
+
     purchased['product_category'] = "a › a › b"
     result = get_type_reward(purchased, goal)
     assert result['category_match'] == True
+
     purchased['product_category'] = "a › a › d"
     result = get_type_reward(purchased, goal)
     assert result['category_match'] == False
@@ -147,6 +151,12 @@ def test_get_option_reward():
     assert matches == len(g_opts)
     assert r_option == 1
 
+    # No Fuzzy Match on `size` Attribute
+    g_opts, p_opts = ["10"], {"size": "10.5"}
+    r_option, matches = get_option_reward(purchased, g_opts, p_opts)
+    assert matches == 0
+    assert r_option == 0
+
     # Empty Goal Options
     g_opts, p_opts = [], {"count": "g1", "color": "g2"}
     r_option, matches = get_option_reward(purchased, g_opts, p_opts)
@@ -158,6 +168,24 @@ def test_get_option_reward():
     r_option, matches = get_option_reward(purchased, g_opts, p_opts)
     assert matches == 0
     assert r_option == 0
+
+    # Option found in Title
+    purchased['Title'] = "Powder Blue Snow Shoes for Men, Ski, Snowboard, Winter Sports"
+    r_option, matches = get_option_reward(purchased, ["powder blue"], {})
+    assert matches == 1
+    assert r_option == 1
+
+    # Option found in Description
+    purchased['Title'], purchased['Description'] = "", "Powder Blue Snow Shoes for Men, Ski, Snowboard, Winter Sports"
+    r_option, matches = get_option_reward(purchased, ["powder blue"], {})
+    assert matches == 1
+    assert r_option == 1
+
+    # Option found in Features
+    purchased['Description'], purchased['BulletPoints'] = "", ["Powder Blue Snow Shoes for Men, Ski, Snowboard, Winter Sports"]
+    r_option, matches = get_option_reward(purchased, ["powder blue"], {})
+    assert matches == 1
+    assert r_option == 1
 
 def test_get_reward():
     # Exact Match
