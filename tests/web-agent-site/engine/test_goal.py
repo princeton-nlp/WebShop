@@ -120,38 +120,42 @@ def test_get_attribute_reward():
     assert num_attr_matches == 0
 
 def test_get_option_reward():
+    purchased = {
+        'Title': "",
+        'BulletPoints': [],
+        'Description': ""
+    }
+
     # Exact Match
-    goal = ["grey", "XL", "pack of 12"]
-    purchased = ["pack of 12", "grey", "XL"]
-    r_option, matches = get_option_reward(purchased, goal)
-    assert matches == len(goal)
+    g_opts = ["grey", "XL", "pack of 12"]
+    p_opts = {"count": "pack of 12", "color": "grey", "size": "XL"}
+    r_option, matches = get_option_reward(purchased, g_opts, p_opts)
+    assert matches == len(g_opts)
     assert r_option == 1
 
     # Partial Match
-    goal = ["grey", "XL", "pack of 12"]
-    purchased = ["pack of 12", "blue", "XL"]
-    r_option, matches = get_option_reward(purchased, goal)
-    assert matches == len(goal) - 1
+    g_opts = ["grey", "XL", "pack of 12"]
+    p_opts = {"count": "pack of 12", "color": "blue", "size": "XL"}
+    r_option, matches = get_option_reward(purchased, g_opts, p_opts)
+    assert matches == len(g_opts) - 1
     assert r_option == 2./3.
 
     # Fuzzy Match
-    goal = ["cool powder snow", "XL", "pack of 12"]
-    purchased = ["pack of 12", "powder snow", "XL"]
-    r_option, matches = get_option_reward(purchased, goal)
-    assert matches == len(goal)
+    g_opts = ["cool powder snow", "XL", "pack of 12"]
+    p_opts = {"count": "pack of 12", "color": "powder snow", "size": "XL"}
+    r_option, matches = get_option_reward(purchased, g_opts, p_opts)
+    assert matches == len(g_opts)
     assert r_option == 1
 
     # Empty Goal Options
-    goal = []
-    purchased = ["goal 1", "goal 2"]
-    r_option, matches = get_option_reward(purchased, goal)
+    g_opts, p_opts = [], {"count": "g1", "color": "g2"}
+    r_option, matches = get_option_reward(purchased, g_opts, p_opts)
     assert matches == 0
     assert r_option == None
 
     # Empty Purchased Options
-    goal = ["goal 1", "goal 2"]
-    purchased = []
-    r_option, matches = get_option_reward(purchased, goal)
+    g_opts, p_opts = ["g1", "g2"], {}
+    r_option, matches = get_option_reward(purchased, g_opts, p_opts)
     assert matches == 0
     assert r_option == 0
 
