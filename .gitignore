@@ -1,9 +1,12 @@
+Gemfile.lock
+
 *.ipynb*
 *.pyc
 *.swp
 
 .DS_Store
 .idea/
+.github/
 .pytest_cache/
 .vscode/
 *.jekyll-cache/
