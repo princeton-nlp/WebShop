@@ -29,35 +29,39 @@ def test_get_type_reward():
     purchased['product_category'] = "b › c › a"
     result = get_type_reward(purchased, goal)
     assert result['category_match'] == True
+
     purchased['product_category'] = "d › e › f"
     result = get_type_reward(purchased, goal)
     assert result['category_match'] == False
+
     purchased['product_category'] = "a › d › b"
     result = get_type_reward(purchased, goal)
     assert result['category_match'] == True
+
     purchased['product_category'] = "a › a › b"
     result = get_type_reward(purchased, goal)
     assert result['category_match'] == True
+
     purchased['product_category'] = "a › a › d"
     result = get_type_reward(purchased, goal)
     assert result['category_match'] == False
 
     # Similar product names
-    goal['name'] = "Mens D.O.N. Issue 2 Gca Basketball Sneakers Shoes Casual - Off White"
-    purchased['name'] = "PEAK High Top Mens Basketball Shoes Lou Williams Streetball Master Breathable Non Slip Outdoor Sneakers"
+    goal['name'] = "adidas Unisex-Adult D.o.n. Issue 2 Basketball Shoe"
+    purchased['name'] = "adidas Unisex-Adult D.o.n. Issue 2 Indoor Court Shoe"
     result = get_type_reward(purchased, goal)
-    assert isclose(result['title_score'], 0.333, abs_tol=1e-2)
+    assert isclose(result['title_score'], 0.85, abs_tol=1e-2)
 
     # Slightly similar product names
     goal['name'] = "Saireed UL Listed 2 Prong Power Cord for JBL Bar 3.1 Bar 2.1 Channel 4K Ultra HD Soundbar Home Theater System Subwoofer"
     purchased['name'] = "BRST AC Power Cord Outlet Socket Cable Plug Lead for Panasonic SC-HT830V DVD/VCR Combo Home Theater System"
     result = get_type_reward(purchased, goal)
-    assert isclose(result['title_score'], 0.3, abs_tol=1e-2)
+    assert isclose(result['title_score'], 0.31, abs_tol=1e-2)
 
     goal['name'] = "Saireed UL Listed 2 Prong Power Cord for JBL Bar 3.1 Bar 2.1 Channel 4K Ultra HD Soundbar"
     purchased['name'] = "BRST AC Power Cord Outlet Socket Cable Plug Lead for Panasonic SC-HT830V DVD/VCR Combo Home Theater System"
     result = get_type_reward(purchased, goal)
-    assert isclose(result['title_score'], 0.15, abs_tol=1e-2)
+    assert isclose(result['title_score'], 0.17, abs_tol=1e-2)
 
     # Completely different product names
     goal['name'] = "Rusticware 921ORB Kitchen and Bath Cabinet Knob"
@@ -120,40 +124,68 @@ def test_get_attribute_reward():
     assert num_attr_matches == 0
 
 def test_get_option_reward():
+    purchased = {
+        'Title': "",
+        'BulletPoints': [],
+        'Description': ""
+    }
+
     # Exact Match
-    goal = ["grey", "XL", "pack of 12"]
-    purchased = ["pack of 12", "grey", "XL"]
-    r_option, matches = get_option_reward(purchased, goal)
-    assert matches == len(goal)
+    g_opts = ["grey", "XL", "pack of 12"]
+    p_opts = {"count": "pack of 12", "color": "grey", "size": "XL"}
+    r_option, matches = get_option_reward(purchased, g_opts, p_opts)
+    assert matches == len(g_opts)
     assert r_option == 1
 
     # Partial Match
-    goal = ["grey", "XL", "pack of 12"]
-    purchased = ["pack of 12", "blue", "XL"]
-    r_option, matches = get_option_reward(purchased, goal)
-    assert matches == len(goal) - 1
+    g_opts = ["grey", "XL", "pack of 12"]
+    p_opts = {"count": "pack of 12", "color": "blue", "size": "XL"}
+    r_option, matches = get_option_reward(purchased, g_opts, p_opts)
+    assert matches == len(g_opts) - 1
     assert r_option == 2./3.
 
     # Fuzzy Match
-    goal = ["cool powder snow", "XL", "pack of 12"]
-    purchased = ["pack of 12", "powder snow", "XL"]
-    r_option, matches = get_option_reward(purchased, goal)
-    assert matches == len(goal)
+    g_opts = ["cool powder snow", "XL", "pack of 12"]
+    p_opts = {"count": "pack of 12", "color": "powder snow", "size": "XL"}
+    r_option, matches = get_option_reward(purchased, g_opts, p_opts)
+    assert matches == len(g_opts)
     assert r_option == 1
 
+    # No Fuzzy Match on `size` Attribute
+    g_opts, p_opts = ["10"], {"size": "10.5"}
+    r_option, matches = get_option_reward(purchased, g_opts, p_opts)
+    assert matches == 0
+    assert r_option == 0
+
     # Empty Goal Options
-    goal = []
-    purchased = ["goal 1", "goal 2"]
-    r_option, matches = get_option_reward(purchased, goal)
+    g_opts, p_opts = [], {"count": "g1", "color": "g2"}
+    r_option, matches = get_option_reward(purchased, g_opts, p_opts)
     assert matches == 0
     assert r_option == None
 
     # Empty Purchased Options
-    goal = ["goal 1", "goal 2"]
-    purchased = []
-    r_option, matches = get_option_reward(purchased, goal)
+    g_opts, p_opts = ["g1", "g2"], {}
+    r_option, matches = get_option_reward(purchased, g_opts, p_opts)
     assert matches == 0
     assert r_option == 0
+
+    # Option found in Title
+    purchased['Title'] = "Powder Blue Snow Shoes for Men, Ski, Snowboard, Winter Sports"
+    r_option, matches = get_option_reward(purchased, ["powder blue"], {})
+    assert matches == 1
+    assert r_option == 1
+
+    # Option found in Description
+    purchased['Title'], purchased['Description'] = "", "Powder Blue Snow Shoes for Men, Ski, Snowboard, Winter Sports"
+    r_option, matches = get_option_reward(purchased, ["powder blue"], {})
+    assert matches == 1
+    assert r_option == 1
+
+    # Option found in Features
+    purchased['Description'], purchased['BulletPoints'] = "", ["Powder Blue Snow Shoes for Men, Ski, Snowboard, Winter Sports"]
+    r_option, matches = get_option_reward(purchased, ["powder blue"], {})
+    assert matches == 1
+    assert r_option == 1
 
 def test_get_reward():
     # Exact Match

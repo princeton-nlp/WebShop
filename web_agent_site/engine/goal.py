@@ -11,6 +11,7 @@ from web_agent_site.engine.normalize import normalize_color
 
 nlp = spacy.load("en_core_web_lg")
 
+EXACT_MATCH_OPTS = ["size"]
 PRICE_RANGE = [10.0 * i for i in range(1, 100)]
 
 def get_goals(all_products, product_prices, human_goals=True):
@@ -191,14 +192,11 @@ def get_attribute_reward(purchased_product, goal):
                 matched = True
                 break
         # If not in purchased attrs, check Title, Bullet Points (Features), Desc
-        if (
-            not matched and
-            (
-                g_attr in purchased_product['Title'].lower() or
-                g_attr in ' '.join(purchased_product['BulletPoints']).lower() or
-                g_attr in purchased_product['Description'].lower()
-            )
-        ):
+        if (not matched and (
+            g_attr in purchased_product['Title'].lower() or
+            g_attr in ' '.join(purchased_product['BulletPoints']).lower() or
+            g_attr in purchased_product['Description'].lower()
+        )):
             num_attr_matches += 1
             matched = True
     
@@ -206,20 +204,39 @@ def get_attribute_reward(purchased_product, goal):
     return r_attr, num_attr_matches
 
 
-def get_option_reward(purchased_options, goal_options):
+def get_option_reward(purchased_product, goal_options, purchased_options):
     """Calculate reward for purchased product's options w.r.t. goal options"""
-    purchased_options = [normalize_color(o) for o in purchased_options]
+    purchased_options = {k: normalize_color(v) for k, v in purchased_options.items()}
     goal_options = [normalize_color(o) for o in goal_options]
 
-    # Perform fuzzy matching of each purchased option against each goal option
     num_option_matches = 0
-    for g_option in goal_options:
-        for p_option in purchased_options:
-            score = fuzz.token_set_ratio(p_option, g_option)
-            if score > 85:
+    found_goals = set()
+    for p_option_k, p_option_v in purchased_options.items():
+        # Perform matching of each purchased option against each goal option
+        if p_option_k.lower() in EXACT_MATCH_OPTS:
+            # Exact Matching
+            if p_option_v in goal_options:
                 num_option_matches += 1
-                break
-    
+                found_goals.add(p_option_v)
+        else:
+            # Fuzzy Matching
+            for g_option in goal_options:
+                score = fuzz.token_set_ratio(g_option, p_option_v)
+                if score > 85:
+                    num_option_matches += 1
+                    found_goals.add(g_option)
+                    break
+
+    # Look for exact match of option in title, features, or description
+    if len(found_goals) < len(goal_options):
+        for g_option in goal_options:
+            if (g_option not in found_goals and (
+                g_option in purchased_product['Title'].lower() or
+                g_option in ' '.join(purchased_product['BulletPoints']).lower() or
+                g_option in purchased_product['Description'].lower()
+            )):
+                num_option_matches += 1
+
     # Calculate option reward as fraction of goal options hit
     r_option = num_option_matches / len(goal_options) if len(goal_options) > 0 else None
     return r_option, num_option_matches
@@ -236,10 +253,11 @@ def get_reward(purchased_product, goal, price, options, **kwargs):
     r_att, num_attr_matches = get_attribute_reward(purchased_product, goal)
 
     r_option, num_option_matches = get_option_reward(
-        list(options.values()),
-        goal['goal_options'].items()
+        purchased_product,
+        list(goal['goal_options'].values())
         if isinstance(goal['goal_options'], dict)
-        else goal['goal_options']
+        else goal['goal_options'],
+        options
     )
 
     total_reward = (
@@ -251,7 +269,7 @@ def get_reward(purchased_product, goal, price, options, **kwargs):
 
     # If verbose flag enabled, store score sub-components into dictionary
     if kwargs.get('verbose', False):
-        info =  {
+        info = {
             'r_type': r_type_dict['r_type'],
             'r_att': r_att,
             'w_att': len(goal['attributes']) / (len(goal['attributes']) + len(goal['goal_options']) + 1),
