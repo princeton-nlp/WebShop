@@ -18,10 +18,6 @@ FEAT_IDS = join(BASE_DIR, '../data/feat_ids.pt')
 HUMAN_ATTR_PATH = join(BASE_DIR, '../data/items_human_ins.json')
 HUMAN_ATTR_PATH = join(BASE_DIR, '../data/items_human_ins.json')
 
-# DEBUG_PROD_SIZE = 1000  # set to `None` to disable
-# DEFAULT_ATTR_PATH = join(BASE_DIR, '../data/items_ins_v0_debug1000.json')
-# DEFAULT_FILE_PATH = join(BASE_DIR, '../data/items_debug1000.json')
-
 def random_idx(cum_weights):
     """Generate random index by sampling uniformly from sum of all weights, then
     selecting the `min` between the position to keep the list sorted (via bisect)

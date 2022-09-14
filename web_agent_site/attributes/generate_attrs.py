@@ -10,7 +10,6 @@ import pandas as pd
 from tqdm import tqdm
 from rich import print
 
-#ITEMS_PATH = './data/items.json'
 ITEMS_PATH = './data/ITEMS_mar1.json'
 REVIEWS_PATH = './data/reviews.json'
 ATTR_DIR = './data/attributes'
