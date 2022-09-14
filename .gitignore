@@ -8,6 +8,7 @@
 .vscode/
 
 __pycache__/
+data/
 search_engine/indexes*
 search_engine/resources*
 transfer/flagged
