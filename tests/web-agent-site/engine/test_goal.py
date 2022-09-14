@@ -123,6 +123,20 @@ def test_get_attribute_reward():
     assert r_attr == 0
     assert num_attr_matches == 0
 
+    # Synonym Matching
+    goal = {
+        'attributes': ["natural", "wood", "cruelty free"]
+    }
+    purchased = {
+        'Attributes': ["organic", "timber", "handcrafted"],
+        'Title': "English tea for breakfast",
+        'BulletPoints': ["Soothing aroma", "Calming, great feeling"],
+        'Description': "Best tea made by Lipton, great to pair with breakfast"
+    }
+    r_attr, num_attr_matches = get_attribute_reward(purchased, goal)
+    assert r_attr == 2./3.
+    assert num_attr_matches == 2
+
 def test_get_option_reward():
     purchased = {
         'Title': "",
@@ -156,6 +170,13 @@ def test_get_option_reward():
     r_option, matches = get_option_reward(purchased, g_opts, p_opts)
     assert matches == 0
     assert r_option == 0
+
+    # Option is synonym with goal option
+    g_opts = ["rose", "timber", "10"]
+    p_opts = {"color": "pink", "material": "wood", "size": "10.5"}
+    r_option, matches = get_option_reward(purchased, g_opts, p_opts)
+    assert matches == 2
+    assert r_option == 2./3.
 
     # Empty Goal Options
     g_opts, p_opts = [], {"count": "g1", "color": "g2"}

@@ -4,7 +4,9 @@ Functions for specifying goals and reward calculations.
 import itertools
 import random
 import spacy
+
 from collections import defaultdict
+from PyMultiDictionary import MultiDictionary
 from rich import print
 from thefuzz import fuzz
 from web_agent_site.engine.normalize import normalize_color
@@ -182,6 +184,7 @@ def get_attribute_reward(purchased_product, goal):
     goal_attrs = goal['attributes']
 
     num_attr_matches = 0
+    dictionary = MultiDictionary()
     for g_attr in goal_attrs:
         matched = False
         # Check whether goal attribute found in purchased product attribute list
@@ -199,6 +202,10 @@ def get_attribute_reward(purchased_product, goal):
         )):
             num_attr_matches += 1
             matched = True
+        # If not matched, check whether attribute is a synonym of any values in the attribute list
+        if (not matched and len(list(set(dictionary.synonym('en', g_attr)) & set(purchased_attrs))) > 0):
+            num_attr_matches += 1
+            matched = True
     
     r_attr = num_attr_matches / len(goal_attrs)
     return r_attr, num_attr_matches
@@ -206,26 +213,36 @@ def get_attribute_reward(purchased_product, goal):
 
 def get_option_reward(purchased_product, goal_options, purchased_options):
     """Calculate reward for purchased product's options w.r.t. goal options"""
-    purchased_options = {k: normalize_color(v) for k, v in purchased_options.items()}
-    goal_options = [normalize_color(o) for o in goal_options]
+    purchased_options = {
+        k.lower(): normalize_color(v).lower()
+        for k, v in purchased_options.items()
+    }
+    goal_options = [normalize_color(o).lower() for o in goal_options]
 
     num_option_matches = 0
     found_goals = set()
+    dictionary = MultiDictionary()
     for p_option_k, p_option_v in purchased_options.items():
         # Perform matching of each purchased option against each goal option
-        if p_option_k.lower() in EXACT_MATCH_OPTS:
+        if p_option_k in EXACT_MATCH_OPTS:
             # Exact Matching
             if p_option_v in goal_options:
                 num_option_matches += 1
                 found_goals.add(p_option_v)
         else:
+            matched = False
             # Fuzzy Matching
             for g_option in goal_options:
                 score = fuzz.token_set_ratio(g_option, p_option_v)
                 if score > 85:
                     num_option_matches += 1
                     found_goals.add(g_option)
+                    matched = True
                     break
+            # Check if synonym of option available
+            if not matched and len(list(set(dictionary.synonym('en', p_option_v)) & set(goal_options))) > 0:
+                num_option_matches += 1
+                found_goals.add(p_option_v)
 
     # Look for exact match of option in title, features, or description
     if len(found_goals) < len(goal_options):
