@@ -1,6 +1,5 @@
 import sys
 import json
-#import cleantext
 from tqdm import tqdm
 sys.path.insert(0, '../')
 
@@ -46,4 +45,3 @@ with open('./resources_1k/documents.jsonl', 'w+') as f:
 with open('./resources_100k/documents.jsonl', 'w+') as f:
     for doc in docs[:100000]:
         f.write(json.dumps(doc) + '\n')
-
