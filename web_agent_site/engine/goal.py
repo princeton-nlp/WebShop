@@ -203,9 +203,16 @@ def get_attribute_reward(purchased_product, goal):
             num_attr_matches += 1
             matched = True
         # If not matched, check whether attribute is a synonym of any values in the attribute list
-        if (not matched and len(list(set(dictionary.synonym('en', g_attr)) & set(purchased_attrs))) > 0):
-            num_attr_matches += 1
-            matched = True
+        if not matched:
+            # Try catch in case third party library throws error
+            try:
+                synonyms = set(dictionary.synonym('en', g_attr))
+                matches = len(list(synonyms & set(purchased_attrs)))
+                if matches > 0:
+                    num_attr_matches += 1
+                    matched = True
+            except:
+                continue
     
     r_attr = num_attr_matches / len(goal_attrs)
     return r_attr, num_attr_matches
@@ -240,9 +247,16 @@ def get_option_reward(purchased_product, goal_options, purchased_options):
                     matched = True
                     break
             # Check if synonym of option available
-            if not matched and len(list(set(dictionary.synonym('en', p_option_v)) & set(goal_options))) > 0:
-                num_option_matches += 1
-                found_goals.add(p_option_v)
+            if not matched:
+                # Try catch in case third party library throws error
+                try:
+                    synonyms = set(dictionary.synonym('en', p_option_v))
+                    matches = len(list(synonyms & set(goal_options)))
+                    if matches > 0:
+                        num_option_matches += 1
+                        found_goals.add(p_option_v)
+                except:
+                    continue
 
     # Look for exact match of option in title, features, or description
     if len(found_goals) < len(goal_options):
