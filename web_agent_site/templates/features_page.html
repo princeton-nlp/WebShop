@@ -10,21 +10,16 @@
   </head>
   <body>
     <div class="container py-5">
-      <div class="row top-buffer">
-        <div class="col-sm-6">
-          <div id="instruction-text" class="text-center">
-            <h4>Instruction:<br>{{ instruction_text }}</h4>
-          </div>
-        </div>
+      <div id="instruction-text">
+        <h4 style="padding:2px 10px;">Instruction: {{ instruction_text }}</h4>
+        <h4 style="padding:2px 10px;">Current Query: {{ keywords }}</h4>
       </div>
-      <div class="row top-buffer">
-        <form method="post" action="{{url_for('index', session_id=session_id)}}">
+      <div>
+        <form method="post" action="{{url_for('index', session_id=session_id)}}" style="float:left;padding-right:10px;">
           <button type="submit" class="btn btn-success">Back to Search</button>
         </form>
-      </div>
-      <div class="row top-buffer">
         <form method="post" action="{{url_for('item_page', session_id=session_id, asin=asin, keywords=keywords, page=page, options=options)}}">
-          <button type="submit" class="btn btn-primary">&lt; Prev</button>
+          <button type="submit" class="btn btn-primary">&lt; Back to Item Page</button>
         </form>
       </div>
       <div class="row top-buffer">
@@ -32,11 +27,15 @@
           <div class="row top-buffer">
             <div class="col-sm-6" name="bulletpoints">
               <div class="card card-body">
+                {% if product_info.BulletPoints %}
                 <ul>
                   {% for bulletpoint in product_info.BulletPoints %}
                   <li><p class="product-info"> {{bulletpoint}}</p></li>
                   {% endfor %}
                 </ul>
+                {% else %}
+                No Features
+                {% endif %}
               </div>
             </div>
           </div>
