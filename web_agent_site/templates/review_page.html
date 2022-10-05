@@ -36,7 +36,8 @@
                         <span>{{review.score}}</span>
                         {% for i in range(review.score | int) %}
                         <span class="fa fa-star star-active"></span>
-                        {% endfor %} {% for i in range(5 - review.score | int) %}
+                        {% endfor %}
+                        {% for i in range(5 - review.score | int) %}
                         <span class="fa fa-star star-inactive"></span>
                         {% endfor %}
                       </p>
