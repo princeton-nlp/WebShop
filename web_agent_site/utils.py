@@ -10,6 +10,7 @@ DEBUG_PROD_SIZE = None  # set to `None` to disable
 DEFAULT_ATTR_PATH = join(BASE_DIR, '../data/items_ins_v2_1000.json')
 DEFAULT_FILE_PATH = join(BASE_DIR, '../data/items_shuffle_1000.json')
 DEFAULT_REVIEW_PATH = join(BASE_DIR, '../data/reviews.json')
+DEFAULT_ALL_PRODS_PATH = join(BASE_DIR, '../data/all_products_1000.json')
 
 FEAT_CONV = join(BASE_DIR, '../data/feat_conv.pt')
 FEAT_IDS = join(BASE_DIR, '../data/feat_ids.pt')
