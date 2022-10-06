@@ -30,10 +30,10 @@
               <div class="card card-body">
                 {% if product_info.Reviews is defined and product_info.Reviews|length > 0 %}
                   {% for review in product_info.Reviews %}
-                  <div class="card">
-                    <div class="row text-left">
-                      <h4 class="blue-text mt-3">"{{review.title}}"</h4>
-                      <p class="text-left">
+                  <div class="card" style="margin-bottom:1.5em;">
+                    <div>
+                      <h4 class="blue-text" style="margin:0">"{{review.title}}"</h4>
+                      <p class="text-left" style="margin:0">
                         <span>{{review.score}}</span>
                         {% for i in range(review.score | int) %}
                         <span class="fa fa-star star-active"></span>
