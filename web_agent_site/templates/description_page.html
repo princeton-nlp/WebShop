@@ -6,25 +6,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css	">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    <link rel="icon" href="data:,">
+    <link rel="icon" href="{{url_for('static', filename='favicon.ico')}}">
+    <title>WebShop</title>
   </head>
   <body>
     <div class="container py-5">
-      <div class="row top-buffer">
-        <div class="col-sm-6">
-          <div id="instruction-text" class="text-center">
-            <h4>Instruction:<br>{{ instruction_text }}</h4>
-          </div>
-        </div>
+      <div id="instruction-text">
+        <h4 style="padding:2px 10px;">Instruction: {{ instruction_text }}</h4>
+        <h4 style="padding:2px 10px;">Current Query: {{ keywords }}</h4>
       </div>
-      <div class="row top-buffer">
-        <form method="post" action="{{url_for('index', session_id=session_id)}}">
+      <div>
+        <form method="post" action="{{url_for('index', session_id=session_id)}}" style="float:left;padding-right:10px;">
           <button type="submit" class="btn btn-success">Back to Search</button>
         </form>
-      </div>
-      <div class="row top-buffer">
         <form method="post" action="{{url_for('item_page', session_id=session_id, asin=asin, keywords=keywords, page=page, options=options)}}">
-          <button type="submit" class="btn btn-primary">&lt; Prev</button>
+          <button type="submit" class="btn btn-primary">&lt; Back to Item Page</button>
         </form>
       </div>
       <div class="row top-buffer">
@@ -32,7 +28,13 @@
           <div class="row top-buffer">
             <div class="col-sm-6" name="description">
               <div class="card card-body">
-                <p class="product-info">{{product_info.Description}}</p>
+                <p class="product-info">
+                  {% if product_info.Description %}
+                  {{product_info.Description}}
+                  {% else %}
+                  No Description
+                  {% endif %}
+                </p>
               </div>
             </div>
           </div>

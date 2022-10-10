@@ -4,7 +4,8 @@
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="icon" href="data:,">
+    <link rel="icon" href="{{url_for('static', filename='favicon.ico')}}">
+    <title>WebShop</title>
   </head>
   <body>
     <!-- Code reference: https://bootsnipp.com/snippets/m13mN -->
@@ -12,7 +13,7 @@
       <div class="col-md-6 col-md-offset-3">     
         <div class="row">
           <div id="logo" class="text-center">
-            <h2>WebShop</h2>
+            <h2>🛒 WebShop</h2>
           </div>
           <div id="instruction-text" class="text-center">
             <h4>Instruction: <br>{{ instruction_text }}</h4>
@@ -27,6 +28,21 @@
               </div>
             </div>
           </form>
+          <div style="text-align:center;">
+            <a
+              class="btn btn-primary"
+              href="https://webshop-pnlp.github.io/"
+              style="margin-right:0.5em"
+            >
+              Project Site
+            </a>
+            <a
+              class="btn btn-primary"
+              href="https://docs.google.com/presentation/d/12ZwkQICSPxwMY1H1Oyl-4g6mC_X5gEHrOJRG0mxkay8/edit?usp=sharing"
+            >
+              Task Instructions
+            </a>
+          </div>
         </div>            
       </div>
     </div>
