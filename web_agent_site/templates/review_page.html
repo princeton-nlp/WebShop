@@ -32,23 +32,26 @@
           <div class="row top-buffer">
             <div class="col-sm-6" name="reviews">
               <div class="card card-body">
-                {% for review in product_info.Reviews %}
+                {% if product_info.Reviews is defined and product_info.Reviews|length > 0 %}
+                  {% for review in product_info.Reviews %}
                   <div class="card">
                     <div class="row text-left">
                       <h4 class="blue-text mt-3">"{{review.title}}"</h4>
                       <p class="text-left">
                         <span>{{review.score}}</span>
                         {% for i in range(review.score | int) %}
-                            <span class="fa fa-star star-active"></span>
-                        {% endfor %}
-                        {% for i in range(5 - review.score | int) %}
-                            <span class="fa fa-star star-inactive"></span>
+                        <span class="fa fa-star star-active"></span>
+                        {% endfor %} {% for i in range(5 - review.score | int) %}
+                        <span class="fa fa-star star-inactive"></span>
                         {% endfor %}
                       </p>
                       <p class="content">{{review.body}}</p>
                     </div>
                   </div>
-                {% endfor %}
+                  {% endfor %}
+                  {% else %}
+                  <h4>No reviews found</h4>
+                {% endif %}
               </div>
             </div>
           </div>
