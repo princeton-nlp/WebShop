@@ -190,7 +190,7 @@ def parse_args():
     parser.add_argument('--exploration_method', default='softmax', type=str, choices=['eps', 'softmax'])
     parser.add_argument('--w_pg', default=1, type=float)
     parser.add_argument('--w_td', default=1, type=float)
-    parser.add_argument('--w_il', default=1, type=float)
+    parser.add_argument('--w_il', default=0, type=float)
     parser.add_argument('--w_en', default=1, type=float)
 
     # model

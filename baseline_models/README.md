@@ -28,7 +28,10 @@ python train_search.py
 python train_choice.py
 ```
 
-- Train the choice RL mdoels: **coming soon!**
+- Train the choice RL mdoels:
+```bash
+python train_rl.py
+```
 
 - Test the model on WebShop:
 ```bash
