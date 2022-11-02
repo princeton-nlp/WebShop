@@ -33,22 +33,22 @@
       <h2 class="project-tagline">{{ site.description }}</h2>
       {% endif %}
       {% for author in site.authors %}
-      <a class="project-link" href={{ author.link }}>{{ author.name }}</a>
+      <a class="project-link" href={{ author.link }}>{{ author.name }}<sup>
+      {% if author.name contains "Shunyu" or author.name contains "Howard" %}*{% endif %}
+      1</sup></a>
       {% if forloop.last == false %}
       &emsp;
       {% endif %}
       {% endfor %}
       <div style="margin-top: 1rem">
-        <a class="project-link" href="https://princeton-nlp.github.io/">Princeton University</a>
+        <a class="project-link" href="https://princeton-nlp.github.io/"><sup>1</sup>Princeton University</a>
       </div>
+      <p>*indicates equal contribution</p>
       {% if site.env_repo %}
-      <a href="{{ site.env_repo }}" class="btn">Repo (Env. + Baseline)</a>
+      <a href="{{ site.env_repo }}" class="btn"><b>💻&emsp;Repo (Env. + Baseline)</b></a>
       {% endif %}
       {% if site.paper %}
-      <a href="{{ site.paper }}" class="btn">Paper</a>
-      {% endif %}
-      {% if site.live %}
-      <a href="{{ site.live }}" class="btn">Live Env. Site</a>
+      <a href="{{ site.paper }}" class="btn"><b>📝&emsp;Paper</b></a>
       {% endif %}
     </header>
 

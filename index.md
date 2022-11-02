@@ -2,7 +2,11 @@
 layout: default
 ---
 
-<img src="assets/static/recording.gif">
+<div style="text-align:center;">
+  <b>A scalable, simulated web environment with real-world data for developing grounded language agents</b>
+</div>
+
+<img src="assets/static/diagram.gif">
 
 ## Abstract
 
@@ -10,20 +14,35 @@ Existing benchmarks for grounding language in interactive environments either la
 
 ## WebShop Environment
 
-<div style="text-align:center;">
-    <img src="assets/static/webshop-diagram.png" width="90%">
-</div>
+<video controls width="100%">
+  <source src="assets/static/demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
-The diagram's components are as follows:
+Try out the WebShop environment for yourself at the live site [here](http://3.83.245.205:3000/pnlp)!
 
-- A: An example task trajectory in HTML mode, where a user can
-  - (1) search a query in a search page
-  - (2) click a product item in a results page
-  - (3) choose a color option in a item page
-  - (4) check item-detail pages and go back to the item page
-  - (5) finally buy the product to end the episode and receive and reward.
-- B: The results page in simple mode for agent training and evaluation. The <span style="color:blue">blue</span> text indicates clickable actions and **bold** text indicates the action selected by the agent.
-- C: The product notation (described in section 3 of the paper) corresponding to the product in A. The attributes $$Y_{att}$$ are hidden from the task performer.
+The WebShop environment features a variety of <b>states</b> and a number of <b>actions</b> to transition from one state to the next. A state `s` represents one of four types of webpages:
+
+* `search` page that contains a search bar
+* `results` page that lists a set of products returned by a search engine
+* `item` page that describes a product
+* `item-detail` page that shows further information about the product
+
+At each state, an agent has two choices of actions: to either <b>search</b> a text query (e.g. `search[Red shoes]`) or <b>choose</b> a text button (e.g. `choose[Size 9]`). The following table lists the full set of available actions and the state transitions they correspond to.
+
+| Type | Argument | State &#8594; Next State |
+| ----------- | ----------- | ----------- |
+| search | [Query] | Search &#8594; Results |
+| choose | Back to Search | * &#8594; Search |
+| choose | Prev/Next Page | Results &#8594; Results |
+| choose | [Product Title] | Results &#8594; Item |
+| choose | [Option] | Item &#8594; Item |
+| choose | Desc/Overview | Item-Detail &#8594; Item |
+| choose | Buy | Item &#8594; Episode End |
+
+Within this environment, an agent is given a human-provided text <b>instruction</b> and asked to purchase a product that matches the specifications. <b>Rewards</b> are automatically computed using a combination of programmatic matching functions that consider the attributes, type, options and price of the chosen product
+
+In the WebShop environment setting, an agent is presented with a variety of challenges for language grounding, including understanding compositional instructions, query (re-)formulation, comprehending and acting on noisy text in webpages, and performing strategic exploration.
 
 ## Demo
 

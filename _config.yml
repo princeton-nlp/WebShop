@@ -3,7 +3,6 @@ description: Towards Scalable Real-World Web Interaction with Grounded Language 
 env_repo: https://github.com/princeton-nlp/WebShop
 mdl_repo: # To do
 paper: https://arxiv.org/abs/2207.01206
-live: http://3.83.245.205:3000/pnlp
 twitter:
   username: princeton_nlp
   title_image: https://avatars.githubusercontent.com/u/44678448?s=280&v=4
