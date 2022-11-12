@@ -11,7 +11,7 @@ Implementation of the WebShop environment and search agents for the paper:
 [Shunyu Yao*](https://ysymyth.github.io/), [Howard Chen*](https://howard50b.github.io/), [John Yang](https://john-b-yang.github.io/), [Karthik Narasimhan](https://www.cs.princeton.edu/~karthikn/)
 
 <p float="left">
-  <img src="assets/demo.gif">
+  <img src="assets/diagram.gif">
 </p>
 
 This repository contains code for reproducing results. If you find this work useful in your research, please cite:
