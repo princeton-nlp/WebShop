@@ -88,9 +88,9 @@ def parse_args():
     parser.add_argument("--model_path", type=str, default="./ckpts/web_click/epoch_9/model.pth", help="Where to store the final model.")
     parser.add_argument("--mem", type=int, default=0, help="State with memory")
     parser.add_argument("--bart_path", type=str, default='./ckpts/web_search/checkpoint-800', help="BART model path if using it")
-    parser.add_argument("--bart", type=int, default=1, help="use bart or not")
-    parser.add_argument("--image", type=int, default=1, help="use image or not")
-    parser.add_argument("--softmax", type=int, default=1, help="softmax sampling")
+    parser.add_argument("--bart", type=bool, default=True, help="Flag to specify whether to use bart or not (default: True)")
+    parser.add_argument("--image", type=bool, default=True, help="Flag to specify whether to use image or not (default: True)")
+    parser.add_argument("--softmax", type=bool, default=True, help="Flag to specify whether to use softmax sampling or not (default: True)")
 
     args = parser.parse_args()
 
