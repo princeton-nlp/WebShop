@@ -44,12 +44,13 @@
         <a class="project-link" href="https://princeton-nlp.github.io/"><sup>1</sup>Princeton University</a>
       </div>
       <p>*indicates equal contribution</p>
-      {% if site.env_repo %}
-      <a href="{{ site.env_repo }}" class="btn"><b>💻&emsp;Repo (Env. + Baseline)</b></a>
-      {% endif %}
       {% if site.paper %}
       <a href="{{ site.paper }}" class="btn"><b>📝&emsp;Paper</b></a>
       {% endif %}
+      {% if site.env_repo %}
+      <a href="{{ site.env_repo }}" class="btn"><b>💻&emsp;Code</b></a>
+      {% endif %}
+      <a href="http://3.83.245.205:3000/pnlp" class="btn"><b>🌐&emsp;Live Site</b></a>
     </header>
 
     <main id="content" class="main-content" role="main">
