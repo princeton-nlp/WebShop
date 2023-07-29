@@ -74,7 +74,7 @@ DEFAULT_FILE_PATH = join(BASE_DIR, '../data/items_shuffle.json')
 
 7. (Optional) Download ResNet image feature files [here](https://drive.google.com/drive/folders/1jglJDqNV2ryrlZzrS0yOEk-aRAcLAhNw?usp=sharing) and put into `data/` for running models that require image features.
 
-8. (Optional) Human trajectories and be downloaded [here](https://drive.google.com/file/d/1GWC8UlUzfT9PRTRxgYOwuKSJp4hyV1dp/view?usp=sharing).
+8. (Optional) Human demonstration data and be downloaded [here](https://drive.google.com/file/d/1GWC8UlUzfT9PRTRxgYOwuKSJp4hyV1dp/view?usp=sharing).
 
 ## 🛠️ Usage
 The WebShop environment can be rendered in two modes - `html` and `simple` - each of which offer a different observation space. The `simple` mode strips away the extraneous meta-data that the `html` mode includes to make model training and evaluation easier.
