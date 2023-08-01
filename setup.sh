@@ -28,15 +28,25 @@ pip install -r requirements.txt;
 conda install -c pytorch faiss-cpu;
 conda install -c conda-forge openjdk=11;
 
+# Build search engine index
+cd search_engine
+mkdir -p resources resources_100 resources_1k resources_100k
+python convert_product_file_format.py # convert items.json => required doc format
+mkdir -p indexes
+./run_indexing.sh
+cd ..
+
 # Download dataset into `data` folder via `gdown` command
 mkdir -p data;
 cd data;
 if [ "$data" == "small" ]; then
   gdown https://drive.google.com/uc?id=1EgHdxQ_YxqIQlvvq5iKlCrkEKR6-j0Ib; # items_shuffle_1000 - product scraped info
   gdown https://drive.google.com/uc?id=1IduG0xl544V_A_jv3tHXC0kyFi7PnyBu; # items_ins_v2_1000 - product attributes
+  gdown https://drive.google.com/uc?id=1Ywh6NAfKlnAKu8_K_m_pFTKm7Ibiv_Rk; # all_products_1000.json
 elif [ "$data" == "all" ]; then
   gdown https://drive.google.com/uc?id=1A2whVgOO0euk5O13n2iYDM0bQRkkRduB; # items_shuffle
   gdown https://drive.google.com/uc?id=1s2j6NgHljiZzQNL3veZaAiyW_qDEgBNi; # items_ins_v2
+  gdown https://drive.google.com/uc?id=1USleNX_dqQ-bRboTimg7pgqZ-OcamoVQ; # all_products
 else
   echo "[ERROR]: argument for `-d` flag not recognized"
   helpFunction
@@ -46,14 +56,6 @@ cd ..
 
 # Download spaCy large NLP model
 python -m spacy download en_core_web_lg
-
-# Build search engine index
-cd search_engine
-mkdir -p resources resources_100 resources_1k resources_100k
-python convert_product_file_format.py # convert items.json => required doc format
-mkdir -p indexes
-./run_indexing.sh
-cd ..
 
 # Create logging folder + samples of log data
 get_human_trajs () {

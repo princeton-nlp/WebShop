@@ -153,6 +153,7 @@ def item_page(session_id, asin, keywords, page, options):
 
     goal_instruction = user_sessions[session_id]['goal']['instruction_text']
     product_info['goal_instruction'] = goal_instruction
+    keywords = " ".join(keywords.translate({ord(ch):' ' for ch in ',\'[]'}).split())
 
     html = map_action_to_html(
         'click',
