@@ -314,9 +314,7 @@ class SimServer:
         # Imposes `limit` on goals via random selection
         if limit_goals != -1 and limit_goals < len(self.goals):
             self.weights = [goal['weight'] for goal in self.goals]
-            self.cum_weights = [0]
-            for w in self.weights:
-                self.cum_weights.append(self.cum_weights[-1] + w)
+            self.cum_weights = [0] + np.cumsum(self.weights).tolist()
             idxs = []
             while len(idxs) < limit_goals:
                 idx = random_idx(self.cum_weights)
@@ -327,9 +325,7 @@ class SimServer:
 
         # Set extraneous housekeeping variables
         self.weights = [goal['weight'] for goal in self.goals]
-        self.cum_weights = [0]
-        for w in self.weights:
-            self.cum_weights.append(self.cum_weights[-1] + w)
+        self.cum_weights = [0] + np.cumsum(self.weights).tolist()
         self.user_sessions = dict()
         self.search_time = 0
         self.render_time = 0
