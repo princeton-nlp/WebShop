@@ -5,6 +5,8 @@ import string
 import time
 import torch
 
+import numpy as np
+
 from bs4 import BeautifulSoup
 from bs4.element import Comment
 from collections import defaultdict
