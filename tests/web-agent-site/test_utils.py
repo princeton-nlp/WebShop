@@ -4,13 +4,12 @@ import random
 import shutil
 from pathlib import Path
 from web_agent_site.utils import *
+import numpy as np
 
 def test_random_idx():
     random.seed(24)
     weights = [random.randint(0, 10) for _ in range(0, 50)]
-    cml_weights = [0]
-    for w in weights:
-        cml_weights.append(cml_weights[-1] + w)
+    cml_weights = [0] + np.cumsum(weights).tolist()
     idx_1, expected_1 = random_idx(cml_weights), 44
     idx_2, expected_2 = random_idx(cml_weights), 15
     idx_3, expected_3 = random_idx(cml_weights), 36
