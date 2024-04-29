@@ -95,6 +95,7 @@ def index(session_id):
         logger.info(json.dumps(dict(
             page='index',
             url=request.url,
+            my_thing='yolo',
             goal=user_sessions[session_id]['goal'],
         )))
     return map_action_to_html(
@@ -136,6 +137,7 @@ def search_results(session_id, keywords, page):
         goal=user_sessions[session_id]['goal'],
         content=dict(
             keywords=keywords,
+            my_thing='yolo',
             search_result_asins=[p['asin'] for p in products],
             page=page,
         )
@@ -172,6 +174,7 @@ def item_page(session_id, asin, keywords, page, options):
         goal=user_sessions[session_id]['goal'],
         content=dict(
             keywords=keywords,
+            my_thing='yolo',
             page=page,
             asin=asin,
             options=options,
@@ -208,6 +211,7 @@ def item_sub_page(session_id, asin, keywords, page, sub_page, options):
         goal=user_sessions[session_id]['goal'],
         content=dict(
             keywords=keywords,
+            my_thing='yolo',
             page=page,
             asin=asin,
             options=options,
@@ -241,6 +245,7 @@ def done(session_id, asin, options):
         goal=goal,
         content=dict(
             asin=asin,
+            my_thing='yolo',
             options=options,
             price=price,
         ),

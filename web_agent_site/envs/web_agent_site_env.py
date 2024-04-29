@@ -1,4 +1,5 @@
 import gym
+import logging
 import random
 import requests
 import string
@@ -8,11 +9,12 @@ from bs4 import BeautifulSoup
 from bs4.element import Comment
 from gym import spaces
 from os.path import join, dirname, abspath
+from pathlib import Path
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import ElementNotInteractableException
+from selenium.common.exceptions import ElementNotInteractableException, NoSuchElementException
 from web_agent_site.engine.engine import parse_action, END_BUTTON
 
 class WebAgentSiteEnv(gym.Env):
@@ -35,11 +37,11 @@ class WebAgentSiteEnv(gym.Env):
         self.kwargs = kwargs
 
         # Create a browser driver to simulate the WebShop site
-        service = Service(join(dirname(abspath(__file__)), 'chromedriver'))
         options = Options()
+        options.add_argument('--force-device-scale-factor=1')
         if 'render' not in kwargs or not kwargs['render']:
             options.add_argument("--headless")  # don't show browser
-        self.browser = webdriver.Chrome(service=service, options=options)
+        self.browser = webdriver.Chrome(options=options)
 
         # Set flags and values for WebShop session
         self.text_to_clickable = None
@@ -65,9 +67,9 @@ class WebAgentSiteEnv(gym.Env):
         action_name, action_arg = parse_action(action)
         if action_name == 'search':
             try:
-                search_bar = self.browser.find_element_by_id('search_input')
-            except Exception:
-                pass
+                search_bar = self.browser.find_element(By.ID, 'search_input')
+            except NoSuchElementException:
+                print("No search bar found")
             else:
                 search_bar.send_keys(action_arg)
                 search_bar.submit()
@@ -94,16 +96,23 @@ class WebAgentSiteEnv(gym.Env):
         """Returns list of available actions at the current step"""
         # Determine if a search bar is available
         try:
-            search_bar = self.browser.find_element_by_id('search_input')
-        except Exception:
+            search_bar = self.browser.find_element(By.ID, 'search_input')
+        except NoSuchElementException:
             has_search_bar = False
         else:
             has_search_bar = True
 
         # Collect buttons, links, and options as clickables
-        buttons = self.browser.find_elements_by_class_name('btn')
-        product_links = self.browser.find_elements_by_class_name('product-link')
-        buying_options = self.browser.find_elements_by_css_selector("input[type='radio']")
+        buttons = self.browser.find_elements(By.CLASS_NAME, 'btn')
+        try:
+            product_links = self.browser.find_elements(By.CLASS_NAME, 'product-link')
+        except NoSuchElementException:
+            product_links = []
+        
+        try:
+            buying_options = self.browser.find_elements(By.CSS_SELECTOR, "input[type='radio']")
+        except NoSuchElementException:
+            buying_options = []
 
         self.text_to_clickable = {
             f'{b.text}': b
@@ -194,9 +203,14 @@ class WebAgentSiteEnv(gym.Env):
         else:
             self.session = ''.join(random.choices(string.ascii_lowercase, k=5))
         init_url = f'http://127.0.0.1:3000/{self.session}'
+        self.browser.set_window_size(500, 500)
         self.browser.get(init_url)
 
         self.instruction_text = self.get_instruction_text()
+
+        user_log_dir = Path('user_session_logs/mturk')
+        user_log_dir.mkdir(parents=True, exist_ok=True)
+        self.browser.save_screenshot(Path.joinpath(user_log_dir, 'brolo.png'))
 
         return self.observation, None
 
