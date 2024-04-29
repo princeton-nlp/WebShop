@@ -67,8 +67,8 @@ def index(session_id):
         weights = [goal['weight'] for goal in goals]
 
     if session_id not in user_sessions and 'fixed' in session_id:
-        goal_dix = int(session_id.split('_')[-1])
-        goal = goals[goal_dix]
+        goal_idx = int(session_id.split('_')[-1])
+        goal = goals[goal_idx]
         instruction_text = goal['instruction_text']
         user_sessions[session_id] = {'goal': goal, 'done': False}
         if user_log_dir is not None:

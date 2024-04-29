@@ -3,7 +3,6 @@ Test the site gym environment.
 
 TODO: move to testing dir for more rigorous tests
 """
-import gym
 from rich import print
 from rich.markup import escape
 
@@ -13,6 +12,8 @@ from web_agent_site.models import (
 )
 from web_agent_site.utils import DEBUG_PROD_SIZE
 
+import sys
+
 
 if __name__ == '__main__':
     #env = gym.make('WebAgentSite-v0')
@@ -20,7 +21,11 @@ if __name__ == '__main__':
     #env = WebAgentSiteEnv(observation_mode='html', render=False)
     env = WebAgentSiteEnv(observation_mode='html', run_id='69', render=False, num_products=DEBUG_PROD_SIZE)
     global_step = 0
-    
+    if len(sys.argv) > 1:
+        print(f'PID: {sys.argv[1]}')
+    else:
+        print("No arguments provided.") 
+        exit(0)
     try:
         policy = QwenPolicy(env.instruction_text)
     
