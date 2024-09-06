@@ -38,7 +38,6 @@ WebShop is a simulated e-commerce website environment with 1.18 million real-wor
 
 **Hugging Face Demo**: Devise your own natural language query for a product and ask for an agent trained with WebShop to find it on Amazon or eBay, deployed as a 🤗 Hugging Face space [here](https://huggingface.co/spaces/webshop/amazon_shop)!
 
-**Python Package**: If you would like to interact with the `WebShop` environment interface instead of installing and setting up the source code, you can install the `webshop` python package directly. The [project page](https://pypi.org/project/webshop/) contains (WIP) documentation on how to use the library, and the library can be installed via `pip install webshop`.
 ## 🚀 Setup
 Our code is implemented in Python. To setup, do the following:
 1. Install [Python 3.8.13](https://www.python.org/downloads/release/python-3813/)
